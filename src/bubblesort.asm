@@ -1,117 +1,93 @@
 # att_syntax bubblesort
 
-.global main
-.section .text
-
-main:
-	# allocate buffer for byte array
-	push $16			#
-	call malloc			# allocate 16 bytes
-	addl $4, %esp		# clean up stack
-	movl %eax, %ecx
-
-	# fill buffer
-	movl $0x02010301, 0(%ecx)
-	movl $0x08070903, 4(%ecx)
-	movl $0x06030504, 8(%ecx)
-	movl $0x08020401, 12(%ecx)
-
-	# swap places at index 3 and 6
-	mov $3, %eax
-	mov $7, %ebx
-	call swap
-
-	# sort buffer
-
-	# print out buffer
-	movl $16, %edx
-	call stdout_int_buffer
-
-	# exit process
-	movl $1, %eax		# exit syscall
-	movl $0, %ebx		# exit code 0
-	int $0x80			# (kernel call)
-
+.att_syntax
+.global bubblesort
 #
-# sorts buffer in ecx
+# sorts buffer
 #
-# ecx: pointer to buffer
+# stack1: buffer length
+# stack2: buffer pointer
 #
-# d1, dh: as indexes
-# eax: for length
-# ebx: for tmp values
 bubblesort:
-	ret
+    movl 8(%esp), %ecx
+    movl 4(%esp), %esi
+    addl %esi, %ecx
+    subl $4, %ecx
+    pushl %ecx
+    movl $1, %edi
+
+    # start sorting
+    jmp loop_re
+
+    sorting_loop:
+
+        pushl %ecx
+        pushl %edx
+        # compare values at ecx and edx
+        movl (%ecx), %ecx
+        movl (%edx), %edx
+        cmp %edx, %ecx
+
+        popl %edx
+        popl %ecx
+        # swap if needed otherwise skip
+        jge skip_swap
+            call swap
+
+        skip_swap:
+
+        # either restart loop or go further in loop
+        cmp %esi, %edx
+
+        # let pointers go further if they'll still be in the array
+        je skip_step
+
+        step:
+            # move pointers one step forward
+            subl $4, %ecx
+            subl $4, %edx
+        skip_step:
+
+        # if pointers are still in array go next step in bubblesort
+        jne sorting_loop
+
+        skip_sorting_loop:
+        je loop_re
+
+    loop_re:
+        # set ecx to end of buffer
+        popl %ecx                 # higher buffer pointer
+
+        # set edx one bellow ecx
+        movl %ecx, %edx                  # edx: lower buffer pointer
+        subl $4, %edx
+        pushl %ecx
+
+        # do not need to check lowest position since it has 100% already been correctly sorted
+        #addl $4, %esi
+
+
+        # check if array has been swapped last iteration
+        cmp $0, %edi
+        jne continue
+        popl %ecx
+        ret
+
+        continue:
+        movl $0, %edi                # edi: swapped flag
+
+        jmp sorting_loop
 
 #
-# swaps out integers in buffer pointed to by ecx at index dl and dh
-#
-# ecx: pointer to buffer
-# eax: index1
-# ebx: index2
-#
-# dl: stores tmp value
-# dh: stores tmp value
+# swaps out integers at memory addresses in ecx and edx and sets swapped flag to true
 #
 swap:
-	# Calculate addresses for indexes
-	addl %ecx, %eax
-	addl %ecx, %ebx
-	movb (%eax), %dl
-	movb (%ebx), %dh
-	movb %dl, (%ebx)
-	movb %dh, (%eax)
-	ret
+    # Switch values
+    pushl (%edx)
+    pushl (%ecx)
+    popl (%edx)
+    popl (%ecx)
 
-#
-# writes out int buffer pointed to by ecx to stdout
-#
-# ecx: pointer to buffer
-# edx: size of buffer
-#
-# ebx: stores tmp index value
-# dh: stores tmp value
-stdout_int_buffer:
-	addl %ecx, %edx			# edx marks end of buffer
-	movl %ecx, %ebx			#
-	call write
-	ret
-write:
-	addl $48, (%ebx)
-	addl $1, %ebx
-	cmp %ebx, %edx
-	jne write
-	subl %ecx, %edx
-format:
-	# allocate buffer double the original size
-	imul $2, %edx			#
-	push %edx				#
-	call malloc				#
-	addl $4, %esp			#
-
-
-	call print
-	ret
-
-#
-# copies array pointed to by ecx to array pointed to by edx
-#
-# ecx: arr1
-# ebx: arr2
-# edx: length
-#
-
-
-#
-# write to stdout
-#
-# ecx: pointer to buffer
-# edx: size of buffer
-#
-print:
-	movl $4, %eax			# write
-	movl $1, %ebx			# stdou
-	int $0x80				# (kernel call)
-	ret
-
-.section .data
+    # set swapped flag
+    movl $1, %edi
+    ret
