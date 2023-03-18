@@ -13,15 +13,15 @@ pushl %ecx
 call bubblesort
 ```
 ```asm
-call indexsort
+call insertionsort
 ```
 
 ### in C
 ```c
 // Bubblesort
 bubblesort(arr, sizeof(arr));
-// Indexsort
-indexsort(arr, sizeof(arr));
+// Insertionsort
+insertionsort(arr, sizeof(arr));
 ```
 
 ## example.c
@@ -32,7 +32,7 @@ original array:
 11, 8, 2, 3, 4, 7, 5, 2, 1, 
 bubblesort:
 1, 2, 2, 3, 4, 5, 7, 8, 11, 
-Indexsort:
+Insertionsort:
 1, 2, 2, 3, 4, 5, 7, 8, 11,
 ```
 
@@ -40,6 +40,6 @@ Indexsort:
 The assembly code is written for x86 architecture in at&t syntax. Remember that when assembling and compiling.
 ```bash
 as bubblesort.asm --32 -o bubblesort.o -g
-as indexsort.asm --32 -o indexsort.o -g
-gcc -m32 -masm=att -o example example.c bubblesort.o indexsort.o
+as insertionsort.asm --32 -o insertionsort.o -g
+gcc -m32 -masm=att -o example example.c bubblesort.o insertionsort.o
 ```
