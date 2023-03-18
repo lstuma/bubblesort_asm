@@ -1,10 +1,10 @@
-# att_syntax indexsort
+# att_syntax insertionsort
 
 .att_syntax
-.global indexsort
+.global insertionsort
 
 #
-# sorts buffer using indexsort
+# sorts buffer using insertionsort
 #
 # stack 1: buffer length
 # stack 2: buffer pointer

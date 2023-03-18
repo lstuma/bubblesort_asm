@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 extern int bubblesort(int* arr, int size);
-extern int indexsort(int* arr, int size);
+extern int insertionsort(int* arr, int size);
 
 int main(int argc, char *argv[]) {
   // Create array with some integers
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   /*
   *   Insertionsort
   */
-  indexsort(arr3, sizeof(arr3));
+  insertionsort(arr3, sizeof(arr3));
   printf("\nInsertionsort:\n");
   for(int i = 0; i < sizeof(arr3)/sizeof(arr3[0]); i++) printf("%u, ", arr3[i]);
 }
