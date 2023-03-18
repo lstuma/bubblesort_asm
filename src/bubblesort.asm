@@ -2,11 +2,12 @@
 
 .att_syntax
 .global bubblesort
+
 #
-# sorts buffer
+# sorts buffer using bubblesort
 #
-# stack1: buffer length
-# stack2: buffer pointer
+# stack 1: buffer length
+# stack 2: buffer pointer
 #
 bubblesort:
     movl 8(%esp), %ecx
