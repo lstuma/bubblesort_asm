@@ -1,5 +1,5 @@
-# bubblesort_asm
-This is my first try at actually creating something _~usefull~_ - well at least something - in assembly..
+# sorting algorithms
+Implementing sorting algorithms in Assembly x86
 
 ## Usage
 ### in x86
