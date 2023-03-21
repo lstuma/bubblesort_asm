@@ -1,32 +1,53 @@
-# bubblesort_asm
-This is my first try at actually creating something _~usefull~_ - well at least something - in assembly..
+# Sorting Algorithms!
+Implementing different sorting algorithms in Assembly x86
 
 ## Usage
-### in x86
+### In x86
 ```asm
 # push integer array pointer to stack
 push %ebx
 # push length of array (in bytes) to stack
 pushl %ecx
-# call label
+```
+```asm
 call bubblesort
 ```
-
-### in C
-```c
-bubblesort(arr, sizeof(arr));
+```asm
+call insertionsort
+```
+```asm
+call quicksort
 ```
 
-## example.c
-Example code for usage of function placed in src/ folder.
+### In C
+```c
+// Bubblesort
+bubblesort(arr, sizeof(arr));
+// Insertionsort
+insertionsort(arr, sizeof(arr));
+// Quicksort
+quicksort(arr, sizeof(arr));
+```
+
+## Example Usage
+Example code for usage of sorting functions. (src/example.c)
 ### Console Output:
 ```
-1, 2, 3, 4, 5, 7, 8, 11,
+original array:
+11, 8, 10, 12, 14, 2, 3, 6, 7, 5, 2, 1
+bubblesort:
+1, 2, 2, 3, 5, 6, 7, 8, 10, 11, 12, 14
+Insertionsort:
+1, 2, 2, 3, 5, 6, 7, 8, 10, 11, 12, 14
+Quicksort:
+1, 2, 2, 3, 5, 6, 7, 8, 10, 11, 12, 14
 ```
 
-## assembling, compiling and linking
-The assembly code is written for x86 architecture in at&t syntax. Remember that when assembling and compiling.
+## Assembling, Compiling and Linking
+Remember that the assembly code is written for x86 architecture in at&t syntax when assembling and compiling.
 ```bash
 as bubblesort.asm --32 -o bubblesort.o -g
-echo "compiling" && gcc -m32 -masm=att -o example example.c bubblesort.o
+as insertionsort.asm --32 -o insertionsort.o -g
+as quicksort.asm --32 -o quicksort.o -g
+gcc -m32 -masm=att -o example example.c bubblesort.o insertionsort.o quicksort.o
 ```
