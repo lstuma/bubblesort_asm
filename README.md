@@ -3,19 +3,19 @@ Implementing sorting algorithms in Assembly x86
 
 ## Usage
 ### in x86
-```asm
+```gas
 # push integer array pointer to stack
 push %ebx
 # push length of array (in bytes) to stack
 pushl %ecx
 ```
-```asm
+```gas
 call bubblesort
 ```
-```asm
+```gas
 call insertionsort
 ```
-```asm
+```gas
 call quicksort
 ```
 
